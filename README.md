@@ -152,5 +152,98 @@ Tree-based models and correlation analysis are used to determine which factors m
 This supports interpretability and contributes directly to the final recommendations.
 
 ---
+## 5 – Modeling & Experiments
 
+In this section, we use the cleaned `departments` dataframe from Person 1 to build and evaluate several machine learning models that classify high-risk departments.
+
+---
+
+### 5.1 Creating the Target Variable
+
+We create the binary classification target (`is_high_risk`) using the `high_risk_departments` table.  
+If a department appears in that table, it is labeled as **1**, otherwise **0**.
+
+---
+
+### 5.2 Feature Selection
+
+We drop identifiers and outcome-related columns to avoid information leakage.  
+Then we split the dataset into train, validation, and test sets.
+
+---
+
+### 5.3 Train / Validation / Test Split
+
+We divide the data as follows:  
+- 60% training  
+- 20% validation  
+- 20% test  
+
+Stratification keeps the risk distribution consistent.
+
+---
+
+### 5.4 Preprocessing Pipeline
+
+Person 1 already handled missing values, so we apply only:  
+- Standard scaling (numerical)  
+- One-hot encoding (categorical)  
+
+---
+
+### 5.5 Models Used
+
+We train three different models:
+
+1. Logistic Regression  
+2. Random Forest  
+3. HistGradientBoosting  
+
+All models include the preprocessing pipeline.
+
+---
+
+### 5.6 Hyperparameter Tuning
+
+We use GridSearchCV (3-fold CV) and F1-score to select the best hyperparameters for each model.
+
+---
+
+### Running GridSearch for Each Model
+
+---
+
+### 5.7 Model Evaluation
+
+Each model is evaluated on the test set using accuracy, precision, recall, F1-score, ROC-AUC, and confusion matrices.
+
+---
+
+### Running Evaluations on the Test Set
+
+---
+
+### 5.8 Model Comparison Table
+
+To compare the different models, we summarize their test performance in a single table and inspect which one performs best on F1-score and other metrics.
+
+---
+
+### Feature Importance (Random Forest)
+
+We inspect the top predictors from the Random Forest model.
+
+---
+
+## Summary of Modeling Stage
+
+This section completed the modeling workflow:
+- target creation  
+- preprocessing  
+- model training  
+- hyperparameter tuning  
+- evaluation  
+- feature importance  
+
+These results support the next stage of generating insights and recommendations.
 
