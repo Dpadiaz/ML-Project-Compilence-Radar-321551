@@ -152,98 +152,78 @@ Tree-based models and correlation analysis are used to determine which factors m
 This supports interpretability and contributes directly to the final recommendations.
 
 ---
-## 5 – Modeling & Experiments
 
-In this section, we use the cleaned `departments` dataframe from Person 1 to build and evaluate several machine learning models that classify high-risk departments.
+## 5. Modeling & Experiments (Person 2)
+
+In this section, we use the cleaned and scaled `scaled` dataframe from Person 1
+to train and evaluate machine learning models that classify high-risk departments.
 
 ---
 
 ### 5.1 Creating the Target Variable
 
-We create the binary classification target (`is_high_risk`) using the `high_risk_departments` table.  
-If a department appears in that table, it is labeled as **1**, otherwise **0**.
+We start from the cleaned and scaled dataframe `scaled` produced in Person 1’s section.
+Using the `high_risk_departments` table in the database, we create a binary label:
+
+- 1 = high-risk department  
+- 0 = not high-risk
 
 ---
 
-### 5.2 Feature Selection
+### 5.2 Feature Selection and Train/Test Split
 
-We drop identifiers and outcome-related columns to avoid information leakage.  
-Then we split the dataset into train, validation, and test sets.
+From the scaled dataset we drop:
+- `dept_id`, `dept_name` (identifiers)
+- `overall_risk_score`, `compliance_score_final` (final outcomes that may leak information)
+- the target `is_high_risk` from the feature matrix
 
----
-
-### 5.3 Train / Validation / Test Split
-
-We divide the data as follows:  
-- 60% training  
-- 20% validation  
-- 20% test  
-
-Stratification keeps the risk distribution consistent.
+Then we split the data into train and test sets.
 
 ---
 
-### 5.4 Preprocessing Pipeline
+### 5.3 Models and Hyperparameters
 
-Person 1 already handled missing values, so we apply only:  
-- Standard scaling (numerical)  
-- One-hot encoding (categorical)  
-
----
-
-### 5.5 Models Used
-
-We train three different models:
+We train three different models on the scaled features:
 
 1. Logistic Regression  
 2. Random Forest  
 3. HistGradientBoosting  
 
-All models include the preprocessing pipeline.
+For each model we define a small hyperparameter grid and use GridSearchCV with 3-fold cross-validation
+to find reasonable settings using F1-score as the main metric.
 
 ---
 
-### 5.6 Hyperparameter Tuning
+### 5.4 Running GridSearchCV
 
-We use GridSearchCV (3-fold CV) and F1-score to select the best hyperparameters for each model.
-
----
-
-### Running GridSearch for Each Model
+We run GridSearchCV for each model on the training set and keep the best estimator according to F1-score.
 
 ---
 
-### 5.7 Model Evaluation
+### 5.5 Model Evaluation
 
-Each model is evaluated on the test set using accuracy, precision, recall, F1-score, ROC-AUC, and confusion matrices.
+We evaluate each tuned model on the held-out test set using:
 
----
-
-### Running Evaluations on the Test Set
-
----
-
-### 5.8 Model Comparison Table
-
-To compare the different models, we summarize their test performance in a single table and inspect which one performs best on F1-score and other metrics.
+- Accuracy  
+- Precision  
+- Recall  
+- F1-score  
+- ROC-AUC  
+- Confusion matrix and ROC curve
 
 ---
 
-### Feature Importance (Random Forest)
+### 5.6 Test Results and Model Comparison
 
-We inspect the top predictors from the Random Forest model.
+We now evaluate all three models on the test set and summarize the metrics in a comparison table.
 
 ---
 
-## Summary of Modeling Stage
+### 5.7 Feature Importance (Random Forest)
 
-This section completed the modeling workflow:
-- target creation  
-- preprocessing  
-- model training  
-- hyperparameter tuning  
-- evaluation  
-- feature importance  
+Finally, we inspect which features are most important in the Random Forest model.
+Since the input data is already scaled and fully numeric, we can directly use
+`feature_importances_` together with the original column names.
 
-These results support the next stage of generating insights and recommendations.
+---
 
