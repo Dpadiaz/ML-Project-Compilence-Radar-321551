@@ -227,113 +227,127 @@ Since the input data is already scaled and fully numeric, we can directly use
 
 ---
 
-## 6. Interpretation of Results
+### 6 Results and Discussion
 
-The model evaluations performed in the notebook provide insights into how each supervised learning approach behaves when classifying high-risk departments.
+The model analysis in our notebook demonstrated how each supervised learning approach's performance in classifying high-risk departments is illustrated.
 
 ---
 
 ### 6.1 Overall Model Performance
 
-Three models were trained and tuned through GridSearchCV:
+Three models were trained and tuned by GridSearchCV:
 
 - **Logistic Regression**
 - **Random Forest**
+
 - **HistGradientBoosting**
 
-All models achieved reasonably strong performance. The key takeaway is:
+Every model did a really good job. The most interesting thing that we discovered was that **HistGradientBoosting** got the best test-set results overall with 
+- Accuracy ≈ 0.89.
 
-- **HistGradientBoosting achieved the best overall test-set results**, with:
-  - Accuracy ≈ 0.89  
-  - F1-score ≈ 0.83  
-  - ROC-AUC ≈ 0.93  
+- The approximate **F1-score**  0.83.
 
-This indicates that it provides the strongest ability to discriminate between high-risk and non-high-risk departments.
+- **ROC-AUC** ≈ 0.93
 
-The Random Forest also performed well (F1 ≈ 0.81, ROC-AUC ≈ 0.90), while Logistic Regression served as a strong linear baseline (F1 ≈ 0.73, ROC-AUC ≈ 0.88).
+This shows us that it has the most ability to choose between a high-risk and a low-risk department.
+Analysing **logistic regression**, it was good too: 
+- F1 ≈ **0.73** and ROC-AUC reaching **0.88**
+
+**Random Forest** got a good test-set result with ROC-AUC almost **0.90** and F1 reaching **0.81**. 
 
 ---
 
 ### 6.2 Class Balance and Error Analysis
 
-The target variable `is_high_risk` is moderately imbalanced (≈ 70% class 0, 30% class 1).
+Target variable `is_high_risk` is moderately imbalanced, with roughly 70% class 0 and 30% class 1.
 
-The models show:
+These models represent:
 
-- **High recall for high-risk cases**, meaning the model successfully catches most departments that truly belong in the high-risk category.
-- Slightly lower precision, meaning some departments are incorrectly flagged as high-risk.
+- **High recall for high-risk cases**: The model identifies most of the departments actually falling under the high-risk category.
 
-In compliance contexts, this trade-off is acceptable:
+- Slightly lower precision, meaning a few departments were incorrectly marked as high-risk.
 
-- **False negatives (missed high-risk cases)** are more dangerous than  
-- **False positives (extra departments being reviewed)**.
+The latter is an acceptable trade-off in compliance contexts:
 
+- **False negatives or missed high-risk cases** are more dangerous than
+
+- **Extra Departments taken to reviewals (false positives).
 ---
 
 ### 6.3 ROC Curves and Confusion Matrices
 
-The ROC curves show strong separability between the classes, especially for HistGradientBoosting.  
+The ROC curves below reflect strong separability between classes, with particular emphasis on HistGradientBoosting.
+
 Confusion matrices confirm that:
 
-- Misclassification rates are low.
-- The majority of high-risk cases are correctly identified.
-- Non-high-risk cases are rarely misclassified.
+The misclassification rates are small.
+The majority of the high-risk cases are correctly identified.
+Non-high-risk cases are rarely misclassified.
 
 ---
 
 ### 6.4 Feature Importance and Risk Drivers
 
-Random Forest feature importance analysis shows that the strongest predictors of risk typically include:
+Random Forest feature importance analysis generally identifies the following as the strongest predictors of risk:
 
-- **Historical violations indicators**
-- **Audit results** (`audit_score_q1`, `audit_score_q2`, `compliance_score_final`)
-- **Risk exposure measures**
-- **Reporting gaps and delays**
-- **Remediation and oversight characteristics**
+Indicators of historical violations
 
-These align with intuitive domain expectations and reinforce the interpretability of the model.
+Audrey's audit results: `audit_score_q1`, `audit_score_q2`, `compliance_score_final
 
---- 
+- Risk measures of exposure 
 
-## 7. Ethical and Organizational Considerations
+- Reporting gaps and delays
 
-While the models provide strong predictive performance, deploying a risk classification system inside an organization requires careful attention to ethics, governance, and transparency.
+- Remediation and oversight-each of these characteristics
+
+These agree with intuitive domain expectations and, hence, reinforce the model interpretability.
+
+---
+### 7 Ethical and Organizational Considerations
+
+While these models provide strong predictive performance, the actual deployment of a risk classification system within an organization demands due attention to ethics, governance, and transparency.
+
+-
+
+### 7.1 Fairness and Possible Bias
+
+There may be embedded biases in historical compliance data; for instance, there may have been more frequent audits in some divisions compared to others.
+
+If not caught, a model could inadvertently act out these same patterns.
+Countermeasures include:
+
+Performance tracking across subgroups: division, department type and location
+
+- Tracking the rates of fake positives and fake negatives by group
+
+Now, adjust thresholds or add fairness constraints where it is needed.
 
 ---
 
-### 7.1 Fairness and Potential Bias
+### 7.2 Accountability, Transparency, and Explainability
 
-Historical compliance data may carry embedded biases — for example, some divisions may have been audited more frequently than others.  
-If not monitored, a model may unintentionally reinforce these patterns.
+Compliance decisions have regulatory implications.
 
-Mitigations include:
+Therefore, the model should be **explainable**, not a "black box".
 
-- Performance tracking across subgroups (division, department type, location)
-- Monitoring false positive and false negative rates by group
-- Adjusting thresholds or incorporating fairness constraints when needed
+Best practices:
 
----
+- Record every single preprocessing step (imputation, encoding, scaling)
+- Use feature importance and modern interpretability tools, such as SHAP values.
 
-### 7.2 Transparency and Explainability
-
-Compliance decisions have regulatory consequences.  
-Therefore, the model must remain **explainable**, not a “black box.”
-
-Recommended practices:
-
-- Document all preprocessing steps (imputation, encoding, scaling)
-- Use feature importance and modern interpretability tools (e.g., SHAP values)
-- Provide users with clear explanations of predictions
+- Clearly explanations of predictions to the users
 
 ---
 
 ### 7.3 Human-in-the-Loop Design
 
-The system should support, not replace, compliance experts.
+Its objective is to support, not substitute for, compliance experts.
 
-- Predictions should trigger **human review**, not automatic penalties
-- Experts must be able to override model outputs
-- Feedback from investigators should be logged and incorporated into retraining cycles
+- Predictions should only trigger **human review** and not automatic penalties
+
+- Expert must be allowed to override the model outputs.
+
+- Investigators' feedback should be recorded and included in retraining cycles
 
 ---
 
@@ -341,39 +355,45 @@ The system should support, not replace, compliance experts.
 
 Because the underlying data contains sensitive operational and audit information:
 
-- Access should be restricted and monitored
-- Retention policies should be established
-- Model predictions should be logged to ensure accountability
+- Access and utilization should be restricted and policed.
 
-Together, these considerations ensure the Compliance Radar remains a responsible and trustworthy tool.
+- Retention policies should be established
+
+- Model's predictions are to be logged for accountability
+
+All of these considerations ensures that the Compliance Radar remains a responsible and trustful tool.
 
 ---
 
-## 8. Recommendations and Next Steps
+### 8. Recommendations and Next Steps
 
 ---
 
 ### 8.1 Operational Use Cases
 
-The current prototype already supports several high-value use cases:
+The existing prototype already has a few high-value use cases:
 
-- **Risk-based audit prioritization**  
-  Identify the departments most likely to require intervention.
+- **Risk-based audit prioritization
 
-- **Continuous monitoring**  
-  Recompute risk levels quarterly or monthly to track improvement or deterioration.
+- Identify the departments that may require intervention.
 
-- **Management insights**  
-  Use risk-driver analysis to identify structural weaknesses across the organization.
+- Ongoing monitoring
+
+
+Recompute risk levels quarterly or monthly to track improvement or deterioration.
+
+- **Management insights
+Use risk-driver analysis to identify structural weaknesses across the organization.
 
 ---
 
 ### 8.2 Threshold Strategy
 
-Depending on business needs, the decision threshold can be tuned to emphasize:
+The decision threshold can be tuned depending on the business needs to emphasize:
 
-- **Higher recall** when missing high-risk cases is unacceptable  
-- **Higher precision** when investigation resources are limited
+- Higher recall when missing high-risk cases is not acceptable
+
+- **Higher accuracy** in cases of limited investigative resources
 
 This threshold process should be documented as part of internal policy.
 
@@ -381,25 +401,25 @@ This threshold process should be documented as part of internal policy.
 
 ### 8.3 Model Monitoring and Retraining
 
-Once deployed, models must be monitored for:
+When deployed, the models need to be monitored for:
+- **Performance drift** (reduction in accuracy, recall, F1)
 
-- **Performance drift** (drop in accuracy, recall, F1)
 - **Concept drift** (feature importance shifts)
-- **Data drift** (changes in distribution over time)
 
-Regular retraining cycles should be scheduled based on these indicators.
+- **Data drift** changes in the distribution over time.
+
+Regular cycles of retraining should be scheduled based on the indicators showed above.
 
 ---
 
 ### 8.4 Future Enhancements
 
-Recommended improvements include:
+Possible recommendations for improvement might be:
 
 - Adding **time-series features** (quarterly trends in audits, violations, etc.)
 - Implementing **SHAP-based explainability dashboards**
-- Testing alternative models such as XGBoost or LightGBM
-- Integrating additional contextual datasets (HR, vendor risk, financial stress indicators)
+- Could be tested alternative models such as the XGBoost and LightGBM
+- Additional contextual datasets. This can include HR, vendor risk and even financial stress indicators
 - Performing **unsupervised clustering** to detect hidden behavioral patterns
 
-Implementing these steps will transform the Compliance Radar into a robust, scalable, and interpretable decision-support system.
-
+When implemented, these steps will help the Compliance Radar become a robust, scalable, interpretable decision-support system.
