@@ -221,6 +221,72 @@ to search over these grids using F1-score as the main metric.
 
 ---
 
+### 5.4.1 Explanation of Tuned Hyperparameters
+
+Before running GridSearchCV, we define a set of hyperparameters for each model.
+Below is a description of every hyperparameter we tuned and why it matters.
+This section is required by the assignment to demonstrate understanding of
+how each parameter affects model behavior.
+
+#### Logistic Regression
+- **C**  
+  Controls the strength of regularization.  
+  - Smaller values → stronger regularization (simpler model, less overfitting)  
+  - Larger values → weaker regularization (more flexibility)
+
+- **class_weight**  
+  Adjusts the weight given to each class.  
+  `"balanced"` increases focus on the minority class (high-risk departments).
+
+#### Random Forest
+- **n_estimators**  
+  Number of trees in the forest. More trees improve stability but increase computation.
+
+- **max_depth**  
+  Maximum depth of each decision tree. Controls model complexity.  
+  - Deeper trees → may overfit  
+  - Shallower trees → more generalizable
+
+- **min_samples_split**  
+  Minimum number of samples required to split a node.  
+  Higher values reduce overfitting by preventing deep splits.
+
+- **min_samples_leaf**  
+  Minimum number of samples at a leaf node.  
+  Larger values smooth the model and increase robustness.
+
+- **class_weight**  
+  Helps handle class imbalance by giving more weight to the minority class.
+
+- **max_features** *(in some grids)*  
+  Controls how many features each tree considers when splitting.  
+  `"sqrt"` helps decorrelate trees and often improves performance.
+
+#### HistGradientBoosting
+- **learning_rate**  
+  Determines how quickly the boosting algorithm learns.  
+  Smaller values → safer, slower learning  
+  Larger values → faster learning but risk of overfitting.
+
+- **max_depth**  
+  Maximum depth of individual trees.  
+  Controls how complex each boosting stage can become.
+
+- **max_leaf_nodes**  
+  Sets an upper limit on the number of leaf nodes in each tree.  
+  Acts as an alternative to max_depth for controlling complexity.
+
+- **min_samples_leaf**  
+  Minimum samples per leaf.  
+  Larger values → more smoothing, less variance.
+
+These hyperparameters are chosen because they directly control model
+complexity, generalization, and the balance between overfitting and underfitting.
+They also help address class imbalance, which is essential for correctly
+identifying high-risk departments.
+
+---
+
 ### 5.5 Running GridSearchCV
 
 We run GridSearchCV for each model on the combined training+validation set 
