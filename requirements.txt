@@ -1,7 +1,6 @@
 pandas
 numpy
 matplotlib
-seabron
-sqlite3
-sklearn
-os
+seaborn
+db-sqlite3
+scikit-learn
