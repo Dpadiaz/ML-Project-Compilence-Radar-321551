@@ -481,7 +481,7 @@ All of these considerations ensures that the Compliance Radar remains a responsi
 
 ---
 
-### 8. Recommendations and Next Steps
+### 8. Conclusion and Next Steps
 
 ---
 
