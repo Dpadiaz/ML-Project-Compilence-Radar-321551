@@ -371,6 +371,14 @@ Analysing **logistic regression**, it was good too:
 
 **Random Forest** got a good test-set result with ROC-AUC almost **0.90** and F1 reaching **0.81**. 
 
+
+<img width="1920" height="1440" alt="logistic_regression_roc_curve" src="https://github.com/user-attachments/assets/3da432a5-8d18-4878-b3b1-835364893dd3" />
+
+<img width="1920" height="1440" alt="random_forest_roc_curve" src="https://github.com/user-attachments/assets/6c432005-ee32-4551-aedd-8f63a61e1123" />
+
+<img width="1920" height="1440" alt="logistic_regression_roc_curve" src="https://github.com/user-attachments/assets/a60e8df2-a160-4594-85ec-298ba98004a0" />
+
+
 ---
 
 ### 6.2 Class Balance and Error Analysis
