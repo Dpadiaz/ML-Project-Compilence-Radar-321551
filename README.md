@@ -5,6 +5,7 @@ Kebab, Samba, Baguette.
 Deniz Mehmet Taylan 321551,
 Gustavo Depieri Fİoravanti 321841,
 Diego Diaz 314781. 
+
 ## 1. Introduction
 
 The Compliance Radar project focuses on analyzing organizational compliance behavior using a rich dataset of operational, risk-related, and audit-related variables.  
